@@ -1,0 +1,15 @@
+create table Loans(AccNo integer,Cust_Name varchar(25),Loan_Amount number,Installments number,I
+nt_Rate decimal(5,2),Start_Date date,Interest number);
+insert into Loans values(1,'R.K Gupta',300000,36,12.00,'19-JUL-09',1200);
+insert into Loans values(1,'R.K Gupta',300000,36,12.00,'19-JUL-09',1200);
+insert into Loans values(&ac,'&name',&amount,&Instalno,&Interst,'&date',&interestno);
+select AccNo,Cust_Name,Loan_Amount from Loans;
+select * from Loans where Installments<40;
+
+select AccNo,Loan_Amount from Loans where START_DATE<'01-APR-09';
+7)	Display the details of all the loans whose rate of interest is NULL.
+select * from Loans where Int_Rate is not NULL;
+select distinct(Loan_Amount) from Loans;
+select distinct(installments) from Loans;
+select * from Loans where START_DATE>'31-DEC-08'  and Installments>36;
+select Cust_Name,Loan_Amount from Loans where Installments NOT '36';
