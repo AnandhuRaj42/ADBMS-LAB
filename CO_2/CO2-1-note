@@ -1,0 +1,132 @@
+
+//CO2-1 -programs
+
+#fact
+
+declare
+fact number:=1;
+n number:=&n;
+begin
+	for i in 2..n
+	loop
+		fact:=fact*i;
+	end loop;
+dbms_output.put_line('factorial:'||fact);
+end;
+/
+
+#prime
+
+declare fact:=1;
+n number:=&n;
+if n mode 2=0
+then
+dbms_output.put_line(n||'is prime');
+else
+dbms_output.put_line(n||'is not prime');
+end if;
+end;
+
+declare
+fact number:=1;
+i number;
+n number:=&n;
+begin
+for i in 2..n/2
+loop
+if n mod i =0
+then
+fact:=0;
+exit;
+end if; 
+end loop;
+if fact=0
+then
+dbms_output.put_line(n||' not is prime');
+else
+dbms_output.put_line(n||'is  prime');
+end if;
+end;
+/
+
+
+#Amstrong
+
+create or replace function jkamt(n in number)
+return number is
+s number;
+r number;
+b number;
+begin
+ s:=0;
+ b:=n;
+while(b>0)
+loop
+	r:=b mod 10;
+	s:=s+(r*r*r);
+	b:=floor(b/10);
+end loop;
+return s;
+end;
+
+declare
+n number:=&n;
+s number;
+p number;
+begin
+p:=n;
+s:=jkamt(n);
+if p=s
+ then
+ 	dbms_output.put_line('Amstrong number');
+ else
+ 	dbms_output.put_line('Not Amstrong');
+ end if;
+ end;
+ /
+
+
+#power
+
+create or replace function pow(a number,b number)
+return number as
+p number;
+begin 
+select power(a,b) into p from dual;
+return p;
+end;
+
+declare
+a number:=&a;
+b number:=&b;
+begin
+dbms_output.put_line('Power is '||pow(a,b));
+end;
+/
+ create table shop(itemid varchar(20) primary key,item_name varchar(20),price number);
+ insert into shop values('&itemid','&item_name',&number);
+
+ create or replace function sh(id number)
+ return number as
+ s number;
+ r number;
+ n shop.item_name%type;
+ p shop.price%type;
+ begin
+ s:=id;
+ r:=0;
+ select item_name,price into n,p from shop where itemid=s;
+ dbms_output.put_line('Item Name'||p);
+ dbms_output.put_line('Price'||n);
+ return 0;
+ end;
+ /
+
+declare
+n number:=&n;
+p number;
+begin
+p:=sh(n);
+end;
+/ 
+
