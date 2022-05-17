@@ -1,0 +1,37 @@
+#bank
+
+create table account(acno number,name varchar(20),balance number);
+insert into account values(&acno,'&name',&balance);
+
+create or replace procedure deposit(ac number,bal number) is
+begin
+update account set balance=balance+bal where acno=ac;
+end
+
+create or replace procedure withdraw(ac number,bal number) is
+begin
+update account set balance=balance-bal where acno=ac;
+end;
+
+declare
+ac number;
+bal number;
+ch number;
+begin
+&ac;
+ &bal;
+&ch;
+if ch=1
+  then
+  deposit(ac,bal);
+else
+	withdraw(ac,bal);
+end if;
+end;
+
+
+
+
+
+
+
