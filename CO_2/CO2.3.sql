@@ -44,3 +44,32 @@ elsif ch=3
 end if;
 end;
 / 
+
+
+#Exception
+
+create table product(pid int primary key,pname varchar(20),price int);
+insert into product values(&pid,'&pname',&price);
+
+create or replace procedure record(pi number,pr number) is 
+ex exception;
+begin
+update product set price=price+pr where pid=pi;
+if sql%notfound then
+raise ex;
+end if;
+exception
+when ex then
+dbms_output.put_line('product id invalid');
+end;
+/
+
+declare
+pid int:=&pid;
+price int:=&price;
+begin
+record(pid,price);
+end;
+/
+
+
