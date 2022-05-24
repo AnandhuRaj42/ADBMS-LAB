@@ -136,6 +136,22 @@ create table pold(cdate date,price int);
   end;
   /
 
+#product
+
+create table prod(pname varchar(20),pid int,qty int);
+  insert into prod values('&pname',&pid,&qty);
+create table ord(opid int,pname varchar(20));
+
+create or replace trigger product
+after insert on prod for each row
+begin
+  if(:new.qty<100)
+  then
+  insert into ord values(:new.pid,:new.pname);
+  end if;
+  end;
+
+  
  
 
 
