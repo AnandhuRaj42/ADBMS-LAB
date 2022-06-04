@@ -1,0 +1,149 @@
+ use employee
+  >db.empdetails.insert({name:"Bhavan",age:58,email:"bhavan123@",phone:9226543210,salary:20000})
+  >db.empdetails.insertMany([{name:"Mohan",age:51,email:"mohan123@",phone:9826543210,salary:2000},
+  {name:"Raju",age:35,email:"raju123@",phone:9877654321,salary:30000}])
+
+  > db.empdetails.insertMany([{name:"Anandhu",age:20,email:"anandhu123@",phone:9876543210,salary:20000},
+  {name:"Hari",age:21,email:"hari123@",phone:0987654321,salary:3000}])
+
+
+   #query
+
+> db.empdetails.find({"name":"Mohan"}).pretty()
+{
+        "_id" : ObjectId("629b1d2b38bea461873a6bc1"),
+        "name" : "Mohan",
+        "age" : 51,
+        "email" : "mohan123@",
+        "phone" : 9826543210,
+        "salary" : 2000
+}
+>
+
+
+
+> db.empdetails.find({salary:{$gt:5000}}).pretty();
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bbf"),
+        "name" : "Anandhu",
+        "age" : 20,
+        "email" : "anandhu123@",
+        "phone" : 9876543210,
+        "salary" : 20000
+}
+{
+        "_id" : ObjectId("629b1d2b38bea461873a6bc2"),
+        "name" : "Raju",
+        "age" : 35,
+        "email" : "raju123@",
+        "phone" : 9877654321,
+        "salary" : 30000
+}
+{
+        "_id" : ObjectId("629b1da138bea461873a6bc3"),
+        "name" : "Bhavan",
+        "age" : 58,
+        "email" : "bhavan123@",
+        "phone" : 9226543210,
+        "salary" : 20000
+}
+>
+
+
+
+
+
+>db.empdetails.find({"name":/^R/}).pretty();
+{
+        "_id" : ObjectId("629b1d2b38bea461873a6bc2"),
+        "name" : "Raju",
+        "age" : 35,
+        "email" : "raju123@",
+        "phone" : 9877654321,
+        "salary" : 30000
+}
+>
+
+
+> db.empdetails.find({name:{$nin:["Mohan","Raju","Bhavan"]}}).pretty();
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bbf"),
+        "name" : "Anandhu",
+        "age" : 20,
+        "email" : "anandhu123@",
+        "phone" : 9876543210,
+        "salary" : 20000
+}
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bc0"),
+        "name" : "Hari",
+        "age" : 21,
+        "email" : "hari123@",
+        "phone" : 987654321,
+        "salary" : 3000
+}
+>
+
+
+> db.empdetails.find({name:{$in:["Mohan","Raju","Bhavan"]}}).pretty();
+{
+        "_id" : ObjectId("629b1d2b38bea461873a6bc1"),
+        "name" : "Mohan",
+        "age" : 51,
+        "email" : "mohan123@",
+        "phone" : 9826543210,
+        "salary" : 2000
+}
+{
+        "_id" : ObjectId("629b1d2b38bea461873a6bc2"),
+        "name" : "Raju",
+        "age" : 35,
+        "email" : "raju123@",
+        "phone" : 9877654321,
+        "salary" : 30000
+}
+{
+        "_id" : ObjectId("629b1da138bea461873a6bc3"),
+        "name" : "Bhavan",
+        "age" : 58,
+        "email" : "bhavan123@",
+        "phone" : 9226543210,
+        "salary" : 20000
+}
+>
+
+
+> db.empdetails.find({age:{$lt:30}},{name:1,salary:1}).pretty()
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bbf"),
+        "name" : "Anandhu",
+        "salary" : 20000
+}
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bc0"),
+        "name" : "Hari",
+        "salary" : 3000
+}
+
+
+
+> db.empdetails.find({$and:[{age:{$lt:30}},{salary:{$gt:5000}}]}).pretty();
+{
+        "_id" : ObjectId("629b1c8838bea461873a6bbf"),
+        "name" : "Anandhu",
+        "age" : 20,
+        "email" : "anandhu123@",
+        "phone" : 9876543210,
+        "salary" : 20000
+}
+>
+
+> db.empdetails.update({name:"Mohan"},{$set:{email:"mn123@"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.empdetails.find({name:"Mohan"})
+{ "_id" : ObjectId("629b1d2b38bea461873a6bc1"), "name" : "Mohan", "age" : 51, "email" : "mn123@", "phone" : 9826543210, "salary" : 2000 }
+>
+
+
+> db.empdetails.deleteMany({age:{$gt:56}})
+{ "acknowledged" : true, "deletedCount" : 1 }
