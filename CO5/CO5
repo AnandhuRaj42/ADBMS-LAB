@@ -1,0 +1,115 @@
+#Employee database
+
+> db.empdetails.update({name:"Bhavan"},{$set:{dept:"Developer"}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+
+> db.empdetails.insert({name:"Bhuvan",age:58,email:"bhuvan123@",phone:9226543210,salary:20000})
+WriteResult({ "nInserted" : 1 })
+
+> db.empdetails.update({name:"Bhavan"},{$set:{dept:"Developer"}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+
+> db.empdetails.update({name:"Bhuvan"},{$set:{dept:"Developer"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.empdetails.update({name:"Raju"},{$set:{dept:"Tester"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.empdetails.update({name:"Mohan"},{$set:{dept:"Designer"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.empdetails.update({name:"Hari"},{$set:{dept:"Designer"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.empdetails.update({name:"Anandhu"},{$set:{dept:"Tester"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })	
+
+
+> db.empdetails.aggregate([{$group:{_id:"$dept","Avg_salary":{$avg:"$salary"}}}])
+{ "_id" : "Designer", "Avg_salary" : 2500 }
+{ "_id" : "Tester", "Avg_salary" : 25000 }
+{ "_id" : "Developer", "Avg_salary" : 20000 }
+
+
+> db.empdetails.aggregate([{$group:{_id:"$dept","Min_salary":{$min:"$salary"}}}])
+{ "_id" : "Designer", "Min_salary" : 2000 }
+{ "_id" : "Tester", "Min_salary" : 20000 }
+{ "_id" : "Developer", "Min_salary" : 20000 }
+
+
+> db.empdetails.aggregate([{$group:{_id:"$dept","Max_salary":{$max:"$salary"}}}])
+{ "_id" : "Designer", "Max_salary" : 3000 }
+{ "_id" : "Tester", "Max_salary" : 30000 }
+{ "_id" : "Developer", "Max_salary" : 20000 }
+
+
+> db.empdetails.aggregate([{$group:{_id:"$dept","Employees":{$sum:1}}}])
+{ "_id" : "Designer", "Employees" : 2 }
+{ "_id" : "Tester", "Employees" : 2 }
+{ "_id" : "Developer", "Employees" : 1 }
+
+
+> db.empdetails.createIndex({name:"text"})
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+> db.empdetails.find({$text:{$search:"Mohan Bhuvan"}})
+{ "_id" : ObjectId("629f0b880d183be7b87962aa"), "name" : "Bhuvan", "age" : 58, "email" : "bhuvan123@", "phone" : 9226543210, "salary" : 20000, "dept" : "Developer" }
+{ "_id" : ObjectId("629b1d2b38bea461873a6bc1"), "name" : "Mohan", "age" : 51, "email" : "mn123@", "phone" : 9826543210, "salary" : 2000, "dept" : "Designer" }
+
+
+
+
+#Inventory Database
+
+> use inventory
+switched to db inventory
+
+> db.createCollection("order")
+{ "ok" : 1 }
+
+> db.order.insert({custid:200,name:"Maya",item:"rice",price:340})
+WriteResult({ "nInserted" : 1 })
+
+> db.order.insert({custid:201,name:"Manu",item:"rice",price:340})
+WriteResult({ "nInserted" : 1 })
+
+> db.order.insert({custid:202,name:"Meera",item:"sugar",price:150})
+WriteResult({ "nInserted" : 1 })
+
+> db.order.insert({custid:202,name:"Meera",item:"wheat",price:250})
+WriteResult({ "nInserted" : 1 })
+
+> db.order.insert({custid:200,name:"Maya",item:"wheat",price:250})
+WriteResult({ "nInserted" : 1 })
+
+
+
+> var mapFunction=function(){emit(this.custid,this.price);};
+
+> var reduceFunction=function(key,values){return Array.sum(values);};
+
+> db.order.mapReduce(mapFunction,reduceFunction,{'out':"map_example"})
+{ "result" : "map_example", "ok" : 1 }
+
+> db.map_example.find()
+{ "_id" : 201, "value" : 340 }
+{ "_id" : 202, "value" : 400 }
+{ "_id" : 200, "value" : 590 }
+
+>
+
+
+#example
+
+> var reduceFunction=function(key,values){return Array.avg(values);};
+> db.order.mapReduce(mapFunction,reduceFunction,{query:{custid:{$gt:201}},'out':"map_example"})
+{ "result" : "map_example", "ok" : 1 }
+> db.map_example.find()
+{ "_id" : 202, "value" : 200 }
+>
